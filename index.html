@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101a2a">
+<title>ノヴァリア共和国 — 国家経営シミュレーション</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#18263d;--line:#2a3a53;--text:#edf3fb;--muted:#9fb0c7;--accent:#76b7ff;--good:#62d6a6;--bad:#ff7e88;--gold:#f1c76b}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0b1220,#101a2a 45%,#0b1220);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
+button,select,input{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:#21324d;color:var(--text);padding:10px 12px;border-radius:10px;font-weight:650}button:active{transform:scale(.98)}button.primary{background:#2767a8;border-color:#4b91d8}button.danger{background:#572b39;border-color:#854456}button:disabled{opacity:.4;cursor:not-allowed}
+.app{max-width:900px;margin:auto;padding:14px 12px 36px}.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin:4px 0 14px}.eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:800}.title{font-size:24px;font-weight:850;line-height:1.2;margin:3px 0}.subtitle{font-size:12px;color:var(--muted)}.turnbox{text-align:right;white-space:nowrap}.turnbox strong{display:block;font-size:18px}.tabs{display:flex;gap:7px;overflow:auto;padding:2px 0 12px;position:sticky;top:0;background:#0b1220f2;z-index:4}.tab{white-space:nowrap;padding:8px 12px;font-size:13px}.tab.active{background:#315780;border-color:#6a9dcc}
+.panel{background:linear-gradient(145deg,var(--panel),#101a2a);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 8px 22px #0002}.panel h2{font-size:16px;margin:0 0 10px}.panel h3{font-size:14px;margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.metric{background:#19283d;border:1px solid #293c56;border-radius:12px;padding:11px;min-width:0}.metric .label{font-size:11px;color:var(--muted)}.metric .value{font-size:21px;font-weight:850;letter-spacing:-.03em;margin-top:2px;overflow-wrap:anywhere}.metric .sub{font-size:11px;color:var(--muted)}.good{color:var(--good)!important}.bad{color:var(--bad)!important}.gold{color:var(--gold)!important}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.bar{height:7px;background:#26354b;border-radius:99px;overflow:hidden;margin-top:6px}.bar span{display:block;height:100%;background:linear-gradient(90deg,#428fd0,#70d6b0);border-radius:99px}.bar.goldbar span{background:linear-gradient(90deg,#d9a84b,#f4d782)}.actions{display:grid;grid-template-columns:1fr;gap:9px}.action{border:1px solid var(--line);background:#17253a;border-radius:12px;padding:11px}.action-head{display:flex;justify-content:space-between;gap:8px;font-weight:750}.action p{font-size:12px;color:var(--muted);margin:5px 0 9px}.action button{width:100%}.pill{display:inline-block;font-size:10px;border-radius:99px;padding:3px 7px;background:#263a54;color:#cfe2f8}.pill.warn{background:#523b22;color:#ffdc9b}.pill.good{background:#173d36;color:#94f1cf}.section{display:none}.section.active{display:block}.notice{border-left:3px solid var(--accent);background:#17253a;padding:10px 12px;border-radius:0 10px 10px 0;font-size:13px;margin-bottom:10px}.log{border-bottom:1px solid #26354b;padding:9px 0;font-size:12px}.log:last-child{border:0}.log time{color:var(--accent);font-weight:700;display:block;margin-bottom:2px}.selectrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #26354b}.selectrow:last-child{border:0}.selectrow select{max-width:160px;background:#0f1928;color:var(--text);border:1px solid var(--line);padding:8px;border-radius:8px}.footer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.footer-actions button{flex:1}.map{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}.territory{background:#223a4d;border:1px solid #365b70;border-radius:8px;text-align:center;padding:12px 4px;font-size:11px}.territory.home{background:#225f66;border-color:#4ca4a4}.territory.enemy{background:#553548;border-color:#90556c}.territory.occupied{background:#6c5830;border-color:#c3a34e}.empty{padding:20px;text-align:center;color:var(--muted)}.chart{width:100%;height:110px;display:block}.intro{position:fixed;inset:0;background:#08101deF;z-index:10;display:flex;align-items:center;justify-content:center;padding:18px}.intro-card{max-width:470px;width:100%;background:#121d30;border:1px solid #354963;border-radius:20px;padding:22px}.intro-card h1{font-size:27px;margin:0 0 8px}.intro-card p{color:var(--muted);font-size:14px}.intro-card button{width:100%;margin-top:8px}
+@media(min-width:620px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.actions{grid-template-columns:repeat(2,minmax(0,1fr))}.title{font-size:29px}.panel{padding:17px}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="intro" id="intro"><div class="intro-card">
+<div class="eyebrow">NATIONAL SIMULATION / PROTOTYPE 0.1</div>
+<h1>ノヴァリア共和国</h1>
+<p>経済、財政、人口、外交、産業、国防。あなたの政策が国の未来を変えます。</p>
+<p><b>目標：</b>国民生活を守りながら、持続可能な経済と安全保障を築くこと。</p>
+<p class="small">この試作品は架空の国を舞台にした戦略ゲームです。数値はゲーム用の簡略モデルです。</p>
+<button class="primary" onclick="document.getElementById('intro').remove()">ゲームを開始</button>
+</div></div>
+<div class="app">
+<header class="top">
+ <div><div class="eyebrow">REPUBLIC OF NOVARIA · NATIONAL STRATEGY</div><div class="title">ノヴァリア共和国</div><div class="subtitle">中規模工業国 · 議会制共和国 · 資源輸入依存</div></div>
+ <div class="turnbox"><span class="eyebrow">YEAR / QUARTER</span><strong id="date">2027 / Q1</strong><span class="pill" id="status">平時</span></div>
+</header>
+<nav class="tabs" id="tabs">
+<button class="tab active" data-tab="overview">国家概要</button><button class="tab" data-tab="policy">政策・予算</button><button class="tab" data-tab="diplomacy">外交・貿易</button><button class="tab" data-tab="defense">国防・領土</button><button class="tab" data-tab="history">国政日誌</button>
+</nav>
+<section class="section active" id="overview">
+ <div class="panel"><div class="row"><h2>国家指標</h2><span class="pill" id="growthPill">安定成長</span></div><div class="grid" id="metrics"></div></div>
+ <div class="panel"><h2>国家の健全性</h2><div id="health"></div></div>
+ <div class="panel"><div class="row"><h2>GDP推移</h2><span class="small muted">兆ノヴァ（N₦）</span></div><canvas id="chart" class="chart" width="600" height="160"></canvas><div class="small muted">四半期ごとの実質GDPの推移。ゲーム内指標。</div></div>
+ <div class="panel"><h2>今期の概況</h2><div id="brief"></div><div class="footer-actions"><button class="primary" onclick="advanceTurn()">次の四半期へ →</button></div></div>
+</section>
+<section class="section" id="policy">
+ <div class="panel"><h2>政策設定</h2><div class="notice">政策を変更すると、次のターンから経済・財政・社会指標に影響します。予算配分は合計が自動的に歳出へ反映されます。</div><div id="policies"></div><div class="footer-actions"><button class="primary" onclick="applyPolicies()">政策を確定</button><button onclick="resetPolicies()">初期設定に戻す</button></div><div id="policyMsg" class="small muted"></div></div>
+ <div class="panel"><h2>四半期予算案</h2><div id="budget"></div></div>
+</section>
+<section class="section" id="diplomacy">
+ <div class="panel"><h2>外交関係</h2><div class="small muted">外交行動には費用がかかります。同盟や協定は貿易・安全保障に影響します。</div><div id="diplomats"></div></div>
+ <div class="panel"><h2>貿易・産業戦略</h2><div id="trade"></div></div>
+</section>
+<section class="section" id="defense">
+ <div class="panel"><h2>安全保障状況</h2><div id="military"></div></div>
+ <div class="panel"><h2>周辺地域</h2><div class="map" id="map"></div><div class="small muted">国境紛争は限定的なゲームモデルです。戦争は経済・人口・幸福度に大きな損害を与えます。</div><div class="footer-actions"><button class="danger" id="warBtn" onclick="startWar()">国境紛争を開始</button><button id="peaceBtn" onclick="makePeace()">停戦交渉</button></div><div id="warMsg" class="small muted"></div></div>
+</section>
+<section class="section" id="history">
+ <div class="panel"><div class="row"><h2>国政日誌</h2><button onclick="exportSave()">セーブを書き出す</button></div><div class="small muted">この端末のブラウザに自動保存されます。書き出したセーブはコピーして保管できます。</div><div id="logs"></div><div class="footer-actions"><button onclick="resetGame()">新しい国政を始める</button></div></div>
+ <div class="panel"><h2>セーブデータの復元</h2><textarea id="saveInput" placeholder="書き出したセーブデータをここに貼り付け" style="width:100%;height:90px;background:#0b1422;color:#edf3fb;border:1px solid #2a3a53;border-radius:8px;padding:9px"></textarea><button style="width:100%;margin-top:8px" onclick="importSave()">セーブを読み込む</button><div id="saveMsg" class="small muted"></div></div>
+</section>
+</div>
+<script>
+const initial = {
+ year:2027,q:1,gdp:186.0,gdpHistory:[186.0],growth:1.8,inflation:2.4,debt:91.0,reserves:38.0,
+ population:24.0,birth:1.42,unemployment:5.8,happiness:64,support:52,productivity:102,
+ budget:{tax:24,health:13,education:11,welfare:14,infrastructure:10,research:7,defense:12,green:4},
+ relations:{aurora:35,boreal:12,cyrene:58},agreements:{aurora:false,boreal:false,cyrene:false},
+ tradeMode:"balanced",tariff:5,tech:42,industry:56,military:62,territories:0,war:false,warTurns:0,stability:72,
+ log:[],lastReport:"新政権が発足。財政規律と成長投資の両立が課題です。",gameOver:false
+};
+let S = loadGame() || structuredClone(initial);
+let P = structuredClone(S.budget);
+let pendingTariff=S.tariff,pendingTrade=S.tradeMode;
+const fmt=(n,d=1)=>Number(n).toLocaleString('ja-JP',{minimumFractionDigits:d,maximumFractionDigits:d});
+const money=n=>fmt(n,1)+'兆 N₦';
+function addLog(msg){S.log.unshift({date:`${S.year} Q${S.q}`,msg});S.log=S.log.slice(0,80)}
+function saveGame(){try{localStorage.setItem('novaria-save',JSON.stringify(S))}catch(e){}}
+function loadGame(){try{let x=localStorage.getItem('novaria-save');if(x){let a=JSON.parse(x);if(a&&a.gdp&&a.budget)return a}}catch(e){}return null}
+function switchTab(tab){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===tab));if(tab==='policy')renderPolicy();if(tab==='diplomacy')renderDiplomacy();if(tab==='defense')renderDefense();if(tab==='history')renderHistory()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+function metric(label,value,sub,cls=''){return `<div class="metric"><div class="label">${label}</div><div class="value ${cls}">${value}</div><div class="sub">${sub}</div></div>`}
+function renderOverview(){
+ document.getElementById('date').textContent=`${S.year} / Q${S.q}`;
+ document.getElementById('status').textContent=S.war?'交戦中':'平時';
+ document.getElementById('status').className='pill '+(S.war?'warn':'good');
+ document.getElementById('metrics').innerHTML=[
+ metric('名目GDP',money(S.gdp),'前期比 '+(S.growth>=0?'+':'')+fmt(S.growth)+'%',S.growth>=0?'good':'bad'),
+ metric('インフレ率',fmt(S.inflation)+'%','目標：2%',S.inflation>5?'bad':''),
+ metric('政府債務 / GDP',fmt(S.debt)+'%','財政の持続可能性',S.debt>110?'bad':''),
+ metric('人口',fmt(S.population,2)+'百万人','出生率 '+fmt(S.birth,2),S.birth<1.4?'bad':''),
+ metric('失業率',fmt(S.unemployment)+'%','労働市場',S.unemployment>8?'bad':''),
+ metric('国民幸福度',Math.round(S.happiness)+'/100','生活・将来への期待',S.happiness<45?'bad':'good'),
+ metric('政権支持率',Math.round(S.support)+'%','政治的安定',S.support<35?'bad':''),
+ metric('外貨準備',money(S.reserves),'輸入・金融危機への備え',S.reserves<15?'bad':'')
+ ].join('');
+ let items=[
+ ['経済成長',Math.max(0,Math.min(100,50+S.growth*12)),fmt(S.growth)+'%'],
+ ['財政余力',Math.max(0,100-S.debt/1.5),fmt(S.debt)+'% 債務/GDP'],
+ ['社会の安定',S.stability,Math.round(S.stability)+'/100'],
+ ['技術力',S.tech,Math.round(S.tech)+'/100'],
+ ['産業競争力',S.industry,Math.round(S.industry)+'/100']
+ ];
+ document.getElementById('health').innerHTML=items.map(([n,v,t])=>`<div style="margin:10px 0"><div class="row small"><b>${n}</b><span class="muted">${t}</span></div><div class="bar"><span style="width:${Math.max(0,Math.min(100,v))}%"></span></div></div>`).join('');
+ document.getElementById('growthPill').textContent=S.growth>3?'高成長':S.growth<0?'景気後退':S.growth<1?'低成長':'安定成長';
+ document.getElementById('brief').innerHTML=`<div class="notice">${S.lastReport}</div><div class="grid3">${metric('四半期税収',money(quarterTax()),'税率・GDPに連動')}${metric('四半期歳出',money(quarterSpend()),'政策配分を反映')}${metric('財政収支',money(quarterTax()-quarterSpend()),'赤字は債務に加算',quarterTax()>=quarterSpend()?'good':'bad')}</div>`;
+ drawChart();
+}
+function drawChart(){let c=document.getElementById('chart');if(!c)return;let ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);let arr=S.gdpHistory.slice(-16);if(arr.length<2)arr=[arr[0]||S.gdp,S.gdp];let min=Math.min(...arr)*.98,max=Math.max(...arr)*1.02;ctx.strokeStyle='#2a3a53';ctx.lineWidth=1;for(let i=1;i<4;i++){let y=h*i/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}ctx.strokeStyle='#76b7ff';ctx.lineWidth=3;ctx.beginPath();arr.forEach((v,i)=>{let x=8+i*(w-16)/(arr.length-1),y=h-10-(v-min)/(max-min||1)*(h-24);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.fillStyle='#9fb0c7';ctx.font='12px sans-serif';ctx.fillText(fmt(min)+'兆',3,h-3);ctx.fillText(fmt(max)+'兆',3,14)}
+const policyDefs=[
+ ['tax','実効税率',0,40,1,'%','税収を増やしますが、税率が高すぎると消費・投資を抑えます。'],
+ ['health','医療予算',0,25,1,'%歳出','健康寿命と幸福度を支えます。'],
+ ['education','教育予算',0,25,1,'%歳出','人的資本と長期的な生産性に影響します。'],
+ ['welfare','社会保障',0,30,1,'%歳出','生活の安定を支えますが、財政負担が増えます。'],
+ ['infrastructure','インフラ投資',0,25,1,'%歳出','短期の需要と長期の生産性を押し上げます。'],
+ ['research','研究開発',0,20,1,'%歳出','技術力を高め、将来の産業競争力を強化します。'],
+ ['defense','国防予算',0,25,1,'%歳出','抑止力を高めます。平時は他の投資とのバランスが重要です。'],
+ ['green','エネルギー転換',0,15,1,'%歳出','輸入燃料への依存を減らし、初期費用が発生します。']
+];
+function renderPolicy(){
+ document.getElementById('policies').innerHTML=policyDefs.map(([k,n,min,max,step,unit,desc])=>`<div class="selectrow" style="display:block"><div class="row"><b>${n}</b><b id="v_${k}">${P[k]}${unit==='%'?'%':'%'}</b></div><input style="width:100%;accent-color:#76b7ff" type="range" min="${min}" max="${max}" step="${step}" value="${P[k]}" oninput="P['${k}']=+this.value;document.getElementById('v_${k}').textContent=this.value+'%'"><div class="small muted">${desc}</div></div>`).join('');
+ document.getElementById('budget').innerHTML=budgetHTML(P);
+}
+function budgetHTML(b){let sum=['health','education','welfare','infrastructure','research','defense','green'].reduce((a,k)=>a+b[k],0);return `<div class="grid3">${metric('歳出配分合計',sum+'%','政策別の構成')}${metric('四半期税収',money(quarterTax(b.tax)),'GDP・税率に連動')}${metric('四半期歳出',money(quarterSpend(b)),'GDP・歳出比率に連動')}</div><div class="notice" style="margin-top:10px">歳出配分は ${sum}% です。残りは行政費・利払い・その他の支出としてモデル化されます。</div>`}
+function applyPolicies(){S.budget=structuredClone(P);addLog('政策・予算を更新。実効税率 '+P.tax+'%、研究開発 '+P.research+'%、国防 '+P.defense+'%。');document.getElementById('policyMsg').textContent='政策を確定しました。次の四半期から効果が反映されます。';saveGame();renderAll()}
+function resetPolicies(){P=structuredClone(S.budget);renderPolicy()}
+function quarterTax(tax=S.budget.tax){return S.gdp*tax/100/4}
+function quarterSpend(b=S.budget){let total=['health','education','welfare','infrastructure','research','defense','green'].reduce((a,k)=>a+b[k],0);return S.gdp*(total/100)/4 + S.gdp*.012/4}
+function renderDiplomacy(){
+ const names={aurora:'オーロラ連邦',boreal:'ボレアル共和国',cyrene:'シレネ自由諸島'};
+ document.getElementById('diplomats').innerHTML=Object.keys(names).map(k=>`<div class="action" style="margin:9px 0"><div class="action-head"><span>${names[k]}</span><span class="pill">${S.relations[k]} / 100</span></div><div class="bar"><span style="width:${S.relations[k]}%"></span></div><p>${k==='aurora'?'大規模市場・主要な輸出先。協定で貿易が拡大。':k==='boreal'?'国境を接する軍事大国。関係悪化は安全保障リスク。':'資源と海運に強い島嶼国家。エネルギー取引に重要。'}</p><div class="footer-actions"><button onclick="diplomaticAction('${k}','talk')">首脳会談（費用0.15兆）</button><button onclick="diplomaticAction('${k}','deal')">${S.agreements[k]?'協定締結済み':'貿易協定（費用0.35兆）'}</button></div></div>`).join('');
+ document.getElementById('trade').innerHTML=`<div class="selectrow"><div><b>貿易方針</b><div class="small muted">成長・物価・外交関係への影響</div></div><select id="tradeMode"><option value="balanced">自由貿易重視</option><option value="industry">国内産業保護</option><option value="energy">エネルギー安全保障</option></select></div><div class="selectrow"><div><b>平均関税率</b><div class="small muted">高関税は税収を生みますが輸入価格も上昇</div></div><select id="tariff"><option>0</option><option>5</option><option>10</option><option>15</option><option>20</option></select></div><button style="width:100%;margin-top:10px" class="primary" onclick="setTrade()">貿易方針を確定</button><div class="notice" style="margin-top:10px">技術力：${Math.round(S.tech)}/100　｜　産業競争力：${Math.round(S.industry)}/100</div>`;
+ document.getElementById('tradeMode').value=S.tradeMode;document.getElementById('tariff').value=S.tariff;
+}
+function diplomaticAction(k,type){if(S.gdp<.5){alert('国庫に余裕がありません。');return}if(type==='talk'){S.gdp-=.15;S.relations[k]=Math.min(100,S.relations[k]+8);S.stability=Math.min(100,S.stability+1);addLog(`${{aurora:'オーロラ連邦',boreal:'ボレアル共和国',cyrene:'シレネ自由諸島'}[k]}と首脳会談を実施。関係が改善しました。`)}else{if(S.agreements[k]){alert('すでに協定を締結しています。');return}S.gdp-=.35;S.agreements[k]=true;S.relations[k]=Math.min(100,S.relations[k]+15);S.growth+=.15;addLog(`${{aurora:'オーロラ連邦',boreal:'ボレアル共和国',cyrene:'シレネ自由諸島'}[k]}と貿易協定を締結。中期的な貿易拡大が見込まれます。`)}saveGame();renderAll();renderDiplomacy()}
+function setTrade(){S.tradeMode=document.getElementById('tradeMode').value;S.tariff=+document.getElementById('tariff').value;addLog(`貿易方針を「${{balanced:'自由貿易重視',industry:'国内産業保護',energy:'エネルギー安全保障'}[S.tradeMode]}」、平均関税率${S.tariff}%に設定。`);saveGame();renderAll()}
+function renderDefense(){
+ document.getElementById('military').innerHTML=`<div class="grid">${metric('防衛力',Math.round(S.military)+'/100','装備・訓練・即応態勢')}${metric('国防支出',S.budget.defense+'%','歳出に占める割合')}${metric('戦争状態',S.war?'交戦中':'平時','継戦能力 '+(S.war?Math.max(0,100-S.warTurns*13):100)+'%')}${metric('領土変化',S.territories>0?'+'+S.territories+'地域':'なし','占領地域は維持コストを伴う')}</div><div class="notice" style="margin-top:12px">${S.war?'戦争継続中。軍事力・経済・国民支持の消耗に注意してください。':'周辺国との緊張は存在しますが、現時点で全面戦争には至っていません。'}</div>`;
+ let terr=[['西部州','home'],['首都圏','home'],['北部国境','home'],['オーロラ海域',''],['東部国境','enemy'],['南方諸島',''],['資源湾岸',''],['ボレアル境界','enemy'],['係争地',''+(S.territories>0?'occupied':'')]];
+ document.getElementById('map').innerHTML=terr.map(([n,c])=>`<div class="territory ${c}">${n}${c==='occupied'?'<br>占領下':''}</div>`).join('');
+ document.getElementById('warBtn').disabled=S.war||S.military<35;document.getElementById('peaceBtn').disabled=!S.war;
+ document.getElementById('warMsg').textContent=S.war?`戦争開始から${S.warTurns}ターン。停戦交渉または継戦を選んでください。`:'開戦には軍事力35以上が必要です。戦争は財政と社会に大きな負担を与えます。';
+}
+function startWar(){if(S.war||S.military<35)return;if(!confirm('ボレアル共和国との国境紛争を開始しますか？経済・人口・幸福度への損害が予想されます。'))return;S.war=true;S.warTurns=0;S.relations.boreal=Math.max(0,S.relations.boreal-30);S.stability-=8;addLog('ボレアル共和国との国境紛争が勃発。市場は動揺し、国際社会は自制を求めています。');saveGame();renderAll()}
+function makePeace(){if(!S.war)return;if(!confirm('停戦交渉を行いますか？領土の獲得は確定せず、双方に損失が残ります。'))return;S.war=false;S.relations.boreal=Math.min(100,S.relations.boreal+8);S.stability=Math.min(100,S.stability+3);S.support=Math.min(100,S.support+2);addLog('停戦が成立。復興と外交関係の修復が課題になりました。');saveGame();renderAll()}
+function advanceTurn(){
+ if(S.gameOver){alert('政権運営が終了しました。国政日誌から新しい国政を始められます。');return}
+ let b=S.budget;
+ const spend=quarterSpend(b),tax=quarterTax(b.tax),balance=tax-spend;
+ let investment=(b.infrastructure-10)*.045+(b.research-7)*.035+(b.education-11)*.025+(b.green-4)*.015;
+ let tradeBonus=S.tradeMode==='balanced'?.45:S.tradeMode==='industry'?.15:.25;
+ if(S.agreements.aurora)tradeBonus+=.3;if(S.agreements.cyrene)tradeBonus+=.2;
+ let taxPenalty=Math.max(0,b.tax-25)*.075+Math.max(0,10-b.tax)*.012;
+ let warPenalty=S.war?1.6:0;
+ let growth=1.3+(S.industry-50)*.025+(S.tech-40)*.018+investment+tradeBonus-taxPenalty-Math.max(0,S.inflation-3)*.18-warPenalty;
+ if(S.tradeMode==='industry'){growth+=.1;S.inflation+=.12}
+ if(S.tradeMode==='energy'){growth+=.05;S.reserves+=.18}
+ if(S.tariff>=15) {growth-=.35;S.inflation+=.22}
+ if(S.war){S.warTurns++;growth-=.6;S.military=Math.max(15,S.military-2.4);S.happiness-=2.5;S.support-=2;S.reserves-=.9;S.gdp-=.35;if(S.warTurns>=2&&S.military>45&&Math.random()>.55){S.territories=Math.min(2,S.territories+1);S.military-=5;addLog('前線部隊が係争地の一部を確保。ただし補給線と占領維持の負担が増大。')}}
+ S.growth=growth;
+ S.gdp=Math.max(30,S.gdp*(1+growth/400));
+ S.debt=Math.max(15,S.debt-balance*.5+S.gdp*.005);
+ S.inflation=Math.max(-1,Math.min(15,S.inflation+(growth>3?.12:-.04)+(b.tax<15?.15:0)+(S.war?.4:0)-(S.tradeMode==='energy'?.1:0)));
+ S.tech=Math.min(100,Math.max(0,S.tech+(b.research-7)*.12+(b.education-11)*.035+.15));
+ S.industry=Math.min(100,Math.max(0,S.industry+(b.infrastructure-10)*.07+(S.tradeMode==='industry'?.35:.12)+(S.tech>60?.12:0)));
+ S.productivity=Math.min(180,S.productivity+growth*.025+(b.education-11)*.025);
+ S.unemployment=Math.max(2.5,Math.min(20,S.unemployment-growth*.12+(S.war?.3:0)-(b.infrastructure>10?.12:0)));
+ let birthDelta=(b.welfare-14)*.002+(b.health-13)*.001+(S.happiness-60)*.0006-(S.inflation>5?.004:0);
+ S.birth=Math.max(.8,Math.min(2.4,S.birth+birthDelta));
+ S.population=Math.max(10,S.population*(1+((S.birth-1.8)*.0005-(S.population>25?.0002:0))-(S.war?.0007:0)));
+ S.happiness=Math.max(0,Math.min(100,S.happiness+(b.health-13)*.16+(b.welfare-14)*.18+(growth-1.5)*.22-(S.inflation-2.5)*.4-(S.unemployment-5)*.18-(S.war?1.2:0)));
+ S.support=Math.max(0,Math.min(100,S.support+(S.happiness-60)*.08+(growth-1.5)*.45-(S.inflation-2.5)*.3+(balance>=0?.4:-.4)-(S.war?1.5:0)));
+ S.stability=Math.max(0,Math.min(100,S.stability+(S.support-50)*.06-(S.inflation>6?.6:0)-(S.war?1.5:0)+(balance>=0?.15:0)));
+ S.reserves=Math.max(2,Math.min(100,S.reserves+(S.tradeMode==='energy'?.2:0)+(S.growth>2?.15:-.2)-(S.war?.7:0)));
+ if(S.relations.boreal<25&&!S.war&&Math.random()<.12){S.military=Math.max(0,S.military-1);addLog('ボレアル共和国が国境付近で軍事演習を実施。防衛態勢の見直しが必要です。')}
+ if(S.q===4){S.year++;S.q=1}else S.q++;
+ S.gdpHistory.push(S.gdp);S.gdpHistory=S.gdpHistory.slice(-24);
+ let report=`GDP成長率 ${growth>=0?'+':''}${fmt(growth)}%。財政収支は${balance>=0?'黒字':'赤字'}（${money(Math.abs(balance))}）。`;
+ if(growth<0)report+='景気後退への対応が急務です。';if(S.inflation>5)report+='物価上昇が家計を圧迫しています。';if(S.support<35)report+='政権支持率が危険水域に入りました。';if(S.debt>120)report+='政府債務が高水準です。';if(S.war)report+='戦争による経済・社会の消耗が続いています。';
+ S.lastReport=report;addLog(report);
+ if(S.support<8||S.stability<8){S.gameOver=true;addLog('政権危機が深刻化。信任を失い、政権運営は終了しました。')}
+ saveGame();P=structuredClone(S.budget);renderAll();
+}
+function renderHistory(){document.getElementById('logs').innerHTML=S.log.length?S.log.map(x=>`<div class="log"><time>${x.date}</time>${x.msg}</div>`).join(''):'<div class="empty">まだ記録はありません。次の四半期へ進めてください。</div>'}
+function renderAll(){renderOverview();if(document.getElementById('policy').classList.contains('active'))renderPolicy();if(document.getElementById('diplomacy').classList.contains('active'))renderDiplomacy();if(document.getElementById('defense').classList.contains('active'))renderDefense();if(document.getElementById('history').classList.contains('active'))renderHistory()}
+function exportSave(){let data=JSON.stringify(S);let area=document.getElementById('saveInput');area.value=data;area.focus();area.select();try{document.execCommand('copy');document.getElementById('saveMsg').textContent='セーブデータを欄に表示しました。コピーできる場合はクリップボードにもコピー済みです。'}catch(e){document.getElementById('saveMsg').textContent='欄の内容を長押ししてコピーしてください。'}}
+function importSave(){try{let d=JSON.parse(document.getElementById('saveInput').value);if(!d.gdp||!d.budget||!d.relations)throw Error();S=d;P=structuredClone(S.budget);saveGame();renderAll();document.getElementById('saveMsg').textContent='セーブを読み込みました。'}catch(e){document.getElementById('saveMsg').textContent='データを読み込めません。正しいセーブデータを貼り付けてください。'}}
+function resetGame(){if(!confirm('現在のセーブを消して新しい国政を始めますか？'))return;S=structuredClone(initial);S.log=[];addLog('新政権が発足。財政規律と成長投資の両立が課題です。');P=structuredClone(S.budget);saveGame();renderAll();switchTab('overview')}
+addLog('新政権が発足。財政規律と成長投資の両立が課題です。');renderAll();
+</script>
+</body></html>
